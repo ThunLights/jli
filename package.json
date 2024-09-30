@@ -1,7 +1,10 @@
 {
   "name": "jli",
   "module": "index.ts",
-  "type": "module",
+  "type": "commonjs",
+  "scripts": {
+    "start": "cargo run --bin main"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
