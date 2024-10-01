@@ -1,8 +1,13 @@
-use jli::utils::{ip::{header2ip, tor_check}, json::struct2json};
+use jli::utils::ip::{header2ip, tor_check};
+use jli::utils::json::struct2json;
 
 use actix_files::Files;
-use actix_web::{get, post, web::Redirect, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder, Result};
+use actix_web::http::StatusCode;
+use actix_web::web::Redirect;
 use serde::{Deserialize, Serialize};
+
+use std::path::Path;
 
 #[derive(Serialize, Deserialize)]
 struct TestStruct {
@@ -29,6 +34,18 @@ async fn main_page() -> impl Responder {
 	Redirect::to("/index.html").permanent()
 }
 
+async fn not_found() -> Result<HttpResponse> {
+	if Path::new("../public/404/index.html").is_file() {
+		return Ok(HttpResponse::build(StatusCode::OK)
+			.content_type("text/html; charset=utf-8")
+			.body(include_str!("../public/404/index.html")));
+	}
+
+	Ok(HttpResponse::build(StatusCode::OK)
+		.content_type("text/html; charset=utf-8")
+		.body("<h1>Error 404</h1>"))
+}
+
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
@@ -36,6 +53,7 @@ async fn main() -> std::io::Result<()> {
 			.service(main_page)
             .service(test_api)
 			.service(Files::new("/", "public/").prefer_utf8(true))
+			.default_service(web::route().to(not_found))
     })
     .bind(("0.0.0.0", 3090))
     .expect("fn main crashed")
