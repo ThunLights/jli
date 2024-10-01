@@ -1,0 +1,3 @@
+Sitemap: https://jli.li/sitemap.xml
+User-agent: *
+Disallow: /api/*
