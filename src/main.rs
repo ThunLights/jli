@@ -6,6 +6,7 @@ use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Resp
 use actix_web::http::StatusCode;
 use actix_web::web::Redirect;
 use serde::{Deserialize, Serialize};
+use dotenv::dotenv;
 
 use std::path::Path;
 
@@ -14,6 +15,11 @@ struct TestStruct {
 	ip: String,
 	tor: bool,
 	content: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct EnvConfig {
+	port: u16,
 }
 
 #[post("/api/test")]
@@ -48,6 +54,14 @@ async fn not_found() -> Result<HttpResponse> {
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
+	dotenv().ok();
+	let server_config = match envy::from_env::<EnvConfig>() {
+		Ok(val) => val,
+		Err(_) => EnvConfig { port: 3000 }
+	};
+
+	println!("Server is running on port: {}", server_config.port);
+
     HttpServer::new(|| {
         App::new()
 			.service(main_page)
@@ -55,7 +69,7 @@ async fn main() -> std::io::Result<()> {
 			.service(Files::new("/", "public/").prefer_utf8(true))
 			.default_service(web::route().to(not_found))
     })
-    .bind(("0.0.0.0", 3090))
-    .expect("fn main crashed")
+    .bind(("0.0.0.0", server_config.port))
+    .expect("Failed to bind server")
     .run().await
 }
