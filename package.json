@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "cargo run --bin main"
+    "start": "cargo run --bin main",
+    "test": "cargo test -- --nocapture"
   },
   "devDependencies": {
     "@types/bun": "latest"
