@@ -751,6 +751,7 @@ dependencies = [
  "diesel",
  "dotenv",
  "envy",
+ "regex",
  "serde",
  "serde_json",
  "tokio",
