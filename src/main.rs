@@ -1,5 +1,4 @@
 use jli::utils::database::DBClient;
-use jli::utils::json::struct2json;
 
 use actix_files::Files;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
@@ -8,7 +7,7 @@ use actix_web::web::Redirect;
 use serde::{Deserialize, Serialize};
 use dotenv::dotenv;
 
-use std::path::Path;
+use std::fs;
 use std::sync::Arc;
 
 #[derive(Serialize, Deserialize)]
@@ -38,10 +37,10 @@ struct EnvConfig {
 async fn compress_api(data: web::Data<Arc<DBClient>>, body: web::Json<CompressApiRequest>) -> impl Responder {
 	let db = data.get_ref();
 	match db.get_link(&body.link).await {
-		Ok(val) => {
+		Ok(id) => {
 			let response = CompressApiResponse {
 				link: body.link.to_string(),
-				id: val
+				id,
 			};
 			return HttpResponse::Ok().content_type("application/json").status(StatusCode::OK).json(response);
 		},
@@ -51,21 +50,28 @@ async fn compress_api(data: web::Data<Arc<DBClient>>, body: web::Json<CompressAp
 	}
 }
 
+#[get("/favicon.ico")]
+async fn favicon() -> impl Responder {
+    match fs::read("public/favicon.ico") {
+        Ok(contents) => HttpResponse::Ok()
+            .content_type("image/x-icon")
+            .body(contents),
+        Err(_) => HttpResponse::NotFound().finish(),
+    }
+}
+
 #[get("/")]
 async fn main_page() -> impl Responder {
 	Redirect::to("/index.html").permanent()
 }
 
 async fn not_found() -> Result<HttpResponse> {
-	if Path::new("../public/404/index.html").is_file() {
-		return Ok(HttpResponse::build(StatusCode::OK)
-			.content_type("text/html; charset=utf-8")
-			.body(include_str!("../public/404/index.html")));
-	}
+    let contents = fs::read_to_string("public/404/index.html")
+        .unwrap_or_else(|_| "<title>404 Page Not Found</title>\n<h1>404 Page Not Found</h1>".to_string());
 
-	Ok(HttpResponse::build(StatusCode::OK)
-		.content_type("text/html; charset=utf-8")
-		.body("<h1>Error 404</h1>"))
+    Ok(HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(contents))
 }
 
 #[tokio::main]
@@ -81,9 +87,9 @@ async fn main() -> std::io::Result<()> {
         App::new()
 			.app_data(db.clone())
 			.service(main_page)
+			.service(favicon)
             .service(compress_api)
-			.service(compress_api)
-			.service(Files::new("/", "public/").prefer_utf8(true))
+			.service(Files::new("/", "public/").show_files_listing())
 			.default_service(web::route().to(not_found))
     })
     .bind(("0.0.0.0", server_config.port))
