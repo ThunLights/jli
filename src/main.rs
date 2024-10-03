@@ -1,38 +1,54 @@
-use jli::utils::ip::{header2ip, tor_check};
+use jli::utils::database::DBClient;
 use jli::utils::json::struct2json;
 
 use actix_files::Files;
-use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
 use actix_web::http::StatusCode;
 use actix_web::web::Redirect;
 use serde::{Deserialize, Serialize};
 use dotenv::dotenv;
 
 use std::path::Path;
+use std::sync::Arc;
 
 #[derive(Serialize, Deserialize)]
-struct TestStruct {
-	ip: String,
-	tor: bool,
-	content: String,
+struct CompressApiResponse {
+	pub link: String,
+	pub id: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct CompressApiRequest {
+	pub link: String,
+}
+
+#[derive(Serialize, Deserialize)]
+struct CompressApiBadResponse {
+	pub content: String,
 }
 
 #[derive(Serialize, Deserialize)]
 struct EnvConfig {
 	port: u16,
+	id_size: u16,
+	database_url: String,
 }
 
-#[post("/api/test")]
-async fn test_api(req: HttpRequest) -> impl Responder {
-	let ip = header2ip(&req).await;
-	let tor = tor_check(&req).await;
-	let contents = TestStruct {
-		ip,
-		tor,
-		content: String::from("これはテストです。"),
-	};
-
-    HttpResponse::Ok().content_type("application/json").body(struct2json(&contents).await.unwrap())
+#[post("/api/compress")]
+async fn compress_api(data: web::Data<Arc<DBClient>>, body: web::Json<CompressApiRequest>) -> impl Responder {
+	let db = data.get_ref();
+	match db.get_link(&body.link).await {
+		Ok(val) => {
+			let response = CompressApiResponse {
+				link: body.link.to_string(),
+				id: val
+			};
+			return HttpResponse::Ok().content_type("application/json").status(StatusCode::OK).json(response);
+		},
+		Err(message) => {
+			return HttpResponse::Ok().content_type("application/json").status(StatusCode::BAD_REQUEST).json(CompressApiBadResponse { content: message.to_string() });
+		},
+	}
 }
 
 #[get("/")]
@@ -57,15 +73,16 @@ async fn main() -> std::io::Result<()> {
 	dotenv().ok();
 	let server_config = match envy::from_env::<EnvConfig>() {
 		Ok(val) => val,
-		Err(_) => EnvConfig { port: 3000 }
+		Err(_) => EnvConfig { port: 3000, id_size: 6, database_url: String::from("./db/sites.db") }
 	};
+	let db = Arc::new(DBClient::new(&server_config.database_url, server_config.id_size).await);
 
-	println!("Server is running on port: {}", server_config.port);
-
-    HttpServer::new(|| {
+    HttpServer::new(move || {
         App::new()
+			.app_data(db.clone())
 			.service(main_page)
-            .service(test_api)
+            .service(compress_api)
+			.service(compress_api)
 			.service(Files::new("/", "public/").prefer_utf8(true))
 			.default_service(web::route().to(not_found))
     })
