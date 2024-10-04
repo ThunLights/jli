@@ -1,7 +1,7 @@
 use jli::utils::database::DBClient;
 
 use actix_files::Files;
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{get, middleware, post, web, App, HttpResponse, HttpServer, Responder, Result};
 use actix_web::http::StatusCode;
 use actix_web::web::Redirect;
 use serde::{Deserialize, Serialize};
@@ -85,6 +85,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+			.wrap(middleware::DefaultHeaders::new().add(("cache-control", "no-cache, no-store, must-revalidate")))
 			.app_data(db.clone())
 			.service(main_page)
 			.service(favicon)
