@@ -1,3 +1,4 @@
+use actix_web::middleware::Logger;
 use jli::utils::database::DBClient;
 
 use actix_files::Files;
@@ -33,10 +34,14 @@ struct EnvConfig {
 	database_url: String,
 }
 
+struct AppState {
+	db: Arc<DBClient>,
+}
+
 #[post("/api/compress")]
-async fn compress_api(data: web::Data<Arc<DBClient>>, body: web::Json<CompressApiRequest>) -> impl Responder {
-	let db = data.get_ref();
-	match db.get_link(&body.link).await {
+async fn compress_api(data: web::Data<AppState>, body: web::Json<CompressApiRequest>) -> impl Responder {
+	let db = data.get_ref().db.clone();
+	match db.link2id(&body.link).await {
 		Ok(id) => {
 			let response = CompressApiResponse {
 				link: body.link.to_string(),
@@ -62,7 +67,19 @@ async fn favicon() -> impl Responder {
 
 #[get("/")]
 async fn main_page() -> impl Responder {
-	Redirect::to("/index.html").permanent()
+	Redirect::to("/static/index.html").permanent()
+}
+
+#[get("/{compress_id}")]
+async fn compression_url(data: web::Data<AppState>, path: web::Path<String>) -> impl Responder {
+	let compress_id = path.into_inner();
+	let db = data.get_ref().db.clone();
+
+	if let Ok(link) = db.id2link(&compress_id).await {
+		return Redirect::to(link).permanent()
+	}
+
+	Redirect::to("/static/index.html").permanent()
 }
 
 async fn not_found() -> Result<HttpResponse> {
@@ -85,12 +102,16 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+			.wrap(Logger::default())
 			.wrap(middleware::DefaultHeaders::new().add(("cache-control", "no-cache, no-store, must-revalidate")))
-			.app_data(db.clone())
+			.app_data(web::Data::new(AppState {
+				db: db.clone(),
+			}))
 			.service(main_page)
 			.service(favicon)
+			.service(compression_url)
             .service(compress_api)
-			.service(Files::new("/", "public/").show_files_listing())
+			.service(Files::new("/static/", "public/").show_files_listing())
 			.default_service(web::route().to(not_found))
     })
     .bind(("0.0.0.0", server_config.port))

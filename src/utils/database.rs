@@ -22,7 +22,7 @@ impl DBClient {
 			id_size,
 		}
     }
-	pub async fn get_link(&self, link: &str) -> Result<String, Error> {
+	pub async fn link2id(&self, link: &str) -> Result<String, Error> {
 		if !url_format_check(link) {
 			return Err(Error::new(ErrorKind::Other, "URL Format Error"));
 		}
@@ -36,6 +36,13 @@ impl DBClient {
 				return Err(Error::new(ErrorKind::Other, "DataBase insert Error"));
 			}
 		}
+	}
+	pub async fn id2link(&self, id: &str) -> Result<String, Error> {
+		if let Ok(site) = sqlx::query_as::<_, Site>("SELECT * FROM SITES where id = ?;").bind(id).fetch_one(&self.sites_database).await {
+			return Ok(site.link);
+		}
+
+		Err(Error::new(ErrorKind::Other, "ID NOT FOUND"))
 	}
 	async fn id_generator(&self) -> String {
 		let mut id = generate_id(self.id_size.into());
