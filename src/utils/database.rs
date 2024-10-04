@@ -14,11 +14,10 @@ pub struct DBClient {
     pub sites_database: Pool<Sqlite>,
     pub id_size: u16,
 }
+
 impl DBClient {
     pub async fn new(db_path: &str, id_size: u16) -> Self {
-        let sites_database = SqlitePool::connect(db_path)
-            .await
-            .expect("DBClient fn new Err");
+        let sites_database = SqlitePool::connect(db_path).await.expect("DBClient fn new Err");
         Self {
             sites_database,
             id_size,
@@ -40,11 +39,7 @@ impl DBClient {
         }
     }
     pub async fn id2link(&self, id: &str) -> Result<String, Error> {
-        if let Ok(site) = sqlx::query_as::<_, Site>("SELECT * FROM SITES where id = ?;")
-            .bind(id)
-            .fetch_one(&self.sites_database)
-            .await
-        {
+        if let Ok(site) = sqlx::query_as::<_, Site>("SELECT * FROM SITES where id = ?;").bind(id).fetch_one(&self.sites_database).await {
             return Ok(site.link);
         }
 
@@ -58,26 +53,13 @@ impl DBClient {
         id
     }
     async fn add_link(&self, link: &str, id: &str) -> bool {
-        sqlx::query("INSERT INTO sites (link, id) VALUES ($1, $2)")
-            .bind(link)
-            .bind(id)
-            .execute(&self.sites_database)
-            .await
-            .is_ok()
+        sqlx::query("INSERT INTO sites (link, id) VALUES ($1, $2)").bind(link).bind(id).execute(&self.sites_database).await.is_ok()
     }
     async fn check_id(&self, id: &str) -> bool {
-        sqlx::query_as::<_, Site>("SELECT * FROM SITES where id = ?;")
-            .bind(id)
-            .fetch_one(&self.sites_database)
-            .await
-            .is_ok()
+        sqlx::query_as::<_, Site>("SELECT * FROM SITES where id = ?;").bind(id).fetch_one(&self.sites_database).await.is_ok()
     }
     async fn get_id(&self, link: &str) -> Result<Site, Error> {
-        if let Ok(row) = sqlx::query_as::<_, Site>("SELECT * FROM SITES where link = ?;")
-            .bind(link)
-            .fetch_one(&self.sites_database)
-            .await
-        {
+        if let Ok(row) = sqlx::query_as::<_, Site>("SELECT * FROM SITES where link = ?;").bind(link).fetch_one(&self.sites_database).await {
             return Ok(row);
         }
 

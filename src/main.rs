@@ -1,10 +1,11 @@
 use actix_web::middleware::Logger;
+use jli::utils::config::AppState;
 use jli::utils::database::DBClient;
+use jli::utils::api::{compress_api, decompress_api};
 
 use actix_files::Files;
-use actix_web::http::StatusCode;
 use actix_web::web::Redirect;
-use actix_web::{get, middleware, post, web, App, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{get, middleware, web, App, HttpResponse, HttpServer, Responder, Result};
 use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 
@@ -12,58 +13,10 @@ use std::fs;
 use std::sync::Arc;
 
 #[derive(Serialize, Deserialize)]
-struct CompressApiResponse {
-    pub link: String,
-    pub id: String,
-}
-
-#[derive(Serialize, Deserialize)]
-struct CompressApiRequest {
-    pub link: String,
-}
-
-#[derive(Serialize, Deserialize)]
-struct CompressApiBadResponse {
-    pub content: String,
-}
-
-#[derive(Serialize, Deserialize)]
-struct EnvConfig {
+pub struct EnvConfig {
     port: u16,
     id_size: u16,
     database_url: String,
-}
-
-struct AppState {
-    db: Arc<DBClient>,
-}
-
-#[post("/api/compress")]
-async fn compress_api(
-    data: web::Data<AppState>,
-    body: web::Json<CompressApiRequest>,
-) -> impl Responder {
-    let db = data.get_ref().db.clone();
-    match db.link2id(&body.link).await {
-        Ok(id) => {
-            let response = CompressApiResponse {
-                link: body.link.to_string(),
-                id,
-            };
-            return HttpResponse::Ok()
-                .content_type("application/json")
-                .status(StatusCode::OK)
-                .json(response);
-        }
-        Err(message) => {
-            return HttpResponse::Ok()
-                .content_type("application/json")
-                .status(StatusCode::BAD_REQUEST)
-                .json(CompressApiBadResponse {
-                    content: message.to_string(),
-                });
-        }
-    }
 }
 
 #[get("/favicon.ico")]
@@ -119,15 +72,13 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
-            .wrap(
-                middleware::DefaultHeaders::new()
-                    .add(("cache-control", "no-cache, no-store, must-revalidate")),
-            )
+            .wrap(middleware::DefaultHeaders::new().add(("cache-control", "no-cache, no-store, must-revalidate")))
             .app_data(web::Data::new(AppState { db: db.clone() }))
             .service(main_page)
             .service(favicon)
             .service(compression_url)
             .service(compress_api)
+			.service(decompress_api)
             .service(Files::new("/static/", "public/").show_files_listing())
             .default_service(web::route().to(not_found))
     })
