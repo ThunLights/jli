@@ -21,9 +21,19 @@ async fn favicon() -> impl Responder {
     }
 }
 
+#[get("/sitemap.xml")]
+async fn sitemap() -> impl Responder {
+	HttpResponse::Ok().content_type("application/xml").body(include_str!("../public/sitemap.xml"))
+}
+
+#[get("/robots.txt")]
+async fn robots() -> impl Responder {
+	HttpResponse::Ok().body(include_str!("../public/robots.txt"))
+}
+
 #[get("/")]
 async fn main_page() -> impl Responder {
-    Redirect::to("/static/index.html").permanent()
+    Redirect::to("/site/index.html").permanent()
 }
 
 #[get("/{compress_id}")]
@@ -35,7 +45,7 @@ async fn compression_url(data: web::Data<AppState>, path: web::Path<String>) -> 
         return Redirect::to(link).permanent();
     }
 
-    Redirect::to("/static/index.html").permanent()
+    Redirect::to("/site/index.html").permanent()
 }
 
 async fn not_found() -> Result<HttpResponse> {
@@ -68,10 +78,12 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(AppState { db: db.clone() }))
             .service(main_page)
             .service(favicon)
+			.service(sitemap)
+			.service(robots)
             .service(compression_url)
             .service(compress_api)
 			.service(decompress_api)
-            .service(Files::new("/static/", "public/").show_files_listing())
+            .service(Files::new("/site/", "public/").show_files_listing())
             .default_service(web::route().to(not_found))
     })
     .bind(("0.0.0.0", server_config.port))
