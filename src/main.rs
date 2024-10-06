@@ -1,9 +1,10 @@
-use actix_web::middleware::Logger;
 use jli::utils::config::{AppState, EnvConfig};
 use jli::utils::database::DBClient;
 use jli::utils::api::{compress_api, decompress_api};
 
 use actix_files::Files;
+use actix_web::http::StatusCode;
+use actix_web::middleware::Logger;
 use actix_web::web::Redirect;
 use actix_web::{get, middleware, web, App, HttpResponse, HttpServer, Responder, Result};
 use dotenv::dotenv;
@@ -54,6 +55,7 @@ async fn not_found() -> Result<HttpResponse> {
     });
 
     Ok(HttpResponse::Ok()
+		.status(StatusCode::NOT_FOUND)
         .content_type("text/html; charset=utf-8")
         .body(contents))
 }
