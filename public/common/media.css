@@ -1,0 +1,21 @@
+
+@media screen and (max-width: 550px) {
+	.main .contents-block .search input {
+		width: 380px;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	.main .contents-block .search input {
+		width: 300px;
+	}
+}
+
+@media screen and (max-width: 390px) {
+	.main .contents-block .search input {
+		width: 250px;
+	}
+	.header .header-block .header-title {
+		font-size: 20px;
+	}
+}
