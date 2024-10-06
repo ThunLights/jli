@@ -27,3 +27,10 @@ pub struct CompressApiRequest {
 pub struct CompressApiBadResponse {
     pub content: String,
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct EnvConfig {
+    pub port: u16,
+    pub id_size: u16,
+    pub database_url: String,
+}

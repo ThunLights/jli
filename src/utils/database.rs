@@ -24,7 +24,7 @@ impl DBClient {
         }
     }
     pub async fn link2id(&self, link: &str) -> Result<String, Error> {
-        if !url_format_check(link) {
+        if !url_format_check(link).await {
             return Err(Error::new(ErrorKind::Other, "URL Format Error"));
         }
         if let Ok(site) = self.get_id(link).await {

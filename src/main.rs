@@ -1,5 +1,5 @@
 use actix_web::middleware::Logger;
-use jli::utils::config::AppState;
+use jli::utils::config::{AppState, EnvConfig};
 use jli::utils::database::DBClient;
 use jli::utils::api::{compress_api, decompress_api};
 
@@ -7,17 +7,9 @@ use actix_files::Files;
 use actix_web::web::Redirect;
 use actix_web::{get, middleware, web, App, HttpResponse, HttpServer, Responder, Result};
 use dotenv::dotenv;
-use serde::{Deserialize, Serialize};
 
 use std::fs;
 use std::sync::Arc;
-
-#[derive(Serialize, Deserialize)]
-pub struct EnvConfig {
-    port: u16,
-    id_size: u16,
-    database_url: String,
-}
 
 #[get("/favicon.ico")]
 async fn favicon() -> impl Responder {
