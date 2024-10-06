@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&family=RocknRoll+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200..900&display=swap");
+
+* {
+	margin: 0;
+}
+
+.header {
+	border-bottom: solid 1px black;
+}
+
+.header a {
+	color: black;
+	text-decoration: none;
+}
+
+.header .header-block {
+	display: inline-block;
+	margin: 14px 16px;
+}
+
+.header .header-block .header-title {
+	font-family: "Dela Gothic One", sans-serif;
+	font-size: 25px;
+}
+
+.main {
+	display: block;
+}
+
+.main .contents-block {
+	width: 100%;
+}
+
+.main .contents-block .contents-title {
+	font-family: "M PLUS 1p", sans-serif;
+	text-align: center;
+}
+
+.main .contents-block .search {
+	text-align: center;
+	margin: 20px auto;
+}
+
+.main .contents-block .search input,
+.main .contents-block .search button {
+	background-color: #f7f7f7;
+	border: 1px solid hsla(0, 0%, 78%, .5);
+    border-radius: 0;
+    color: #333;
+    padding: 5px 15px;
+	margin: 35px auto;
+	box-sizing: border-box;
+    font-family: inherit;
+	font-size: inherit;
+	height: 40px !important;
+}
+
+.main .contents-block .search input {
+	width: 450px;
+	cursor: text;
+}
+
+.main .contents-block .search button {
+	cursor: pointer;
+}
+
+.main .contents-block .search button:hover {
+	background-color: #dbdbdb;
+}
+
+.main .contents-block .about {
+	width: 85%;
+	margin: 5px auto;
+}
+
+.main .contents-block .about .about-title {
+	font-family: "M PLUS 1p", sans-serif;
+	font-size: 20px;
+	margin-top: 5px;
+}
+
+.main .contents-block .about .about-description {
+	font-family: "Noto Serif JP", serif;
+	font-size: 16px;
+}
+
+.main .contents-block .about .about-description b p {
+	margin-top: 10px;
+}
+
+.main .contents-block .about .about-description p {
+	margin: 5px 0;
+}
+
+.main .contents-block .about .about-description a {
+	color: black;
+}
+
+.footer {
+	color: #9ca3af;
+	background: #1d1e22;
+	margin-top: 50px;
+}
+
+.footer p {
+	padding: 5px 8px;
+}
+
+.footer a {
+	color: #c1c6ce;
+}
