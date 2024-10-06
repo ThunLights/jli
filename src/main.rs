@@ -1,3 +1,4 @@
+use actix_web::http::header;
 use actix_web::middleware::Logger;
 use jli::utils::config::{AppState, EnvConfig};
 use jli::utils::database::DBClient;
@@ -45,7 +46,7 @@ async fn compression_url(data: web::Data<AppState>, path: web::Path<String>) -> 
         return Redirect::to(link).permanent();
     }
 
-    Redirect::to("/site/index.html").permanent()
+    Redirect::to("/site/404/compression.html").permanent()
 }
 
 async fn not_found() -> Result<HttpResponse> {
