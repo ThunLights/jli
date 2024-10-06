@@ -1,4 +1,3 @@
-use actix_web::http::header;
 use actix_web::middleware::Logger;
 use jli::utils::config::{AppState, EnvConfig};
 use jli::utils::database::DBClient;
