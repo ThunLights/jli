@@ -41,7 +41,7 @@
 
 .main .contents-block .search {
 	text-align: center;
-	margin: 20px auto;
+	margin: 30px auto;
 }
 
 .main .contents-block .search input,
@@ -56,6 +56,11 @@
     font-family: inherit;
 	font-size: inherit;
 	height: 40px !important;
+}
+
+.main .contents-block .search-decompress input,
+.main .contents-block .search-decompress button {
+	margin: 0 auto;
 }
 
 .main .contents-block .search input {
@@ -92,7 +97,7 @@
 }
 
 .main .contents-block .about .about-description p {
-	margin: 5px 0;
+	margin: 6px 0;
 }
 
 .main .contents-block .about .about-description a {

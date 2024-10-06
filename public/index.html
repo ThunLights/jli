@@ -22,8 +22,8 @@
 	<meta name="twitter:creator" content="@thunlights">
 
 	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="/static/common/style.css">
-	<link rel="stylesheet" href="/static/common/media.css">
+	<link rel="stylesheet" href="/site/common/style.css">
+	<link rel="stylesheet" href="/site/common/media.css">
 </head>
 <body>
 	<div class="header">
@@ -37,13 +37,16 @@
 	<div class="main">
 		<div class="contents-block">
 			<div class="search">
-				<input type="url" spellcheck="false" placeholder="ここにURLを入力"><button>短縮</button>
+				<input type="url" spellcheck="false" placeholder="ここにURLを入力" id="compress-url"><button id="compress">短縮</button>
+				<div id="compress-result"></div>
 			</div>
 		</div>
 		<div class="contents-block">
-			<div class="search">
+			<div class="search search-decompress">
 				<p class="contents-title">短縮したURLを解凍することも出来ます。</p>
-				<input type="url" spellcheck="false" placeholder="ここに短縮したURLを入力"><button>解凍</button>
+				<input type="url" spellcheck="false" placeholder="ここに短縮したURLのIDを入力" id="decompress-url"><button id="decompress">解凍</button><br>
+				<small>https://jli.li/rdNwqj の rdNwqj部分がIDです。</small>
+				<div id="decompress-result"></div>
 			</div>
 		</div>
 		<div class="contents-block">
@@ -81,5 +84,7 @@
 		<p>This project is publicly available in Github <a href="https://github.com/thunlights/jli">code</a></p>
 		<p>Supported By <a href="https://www.thunlights.com">Team ThunLights</a></p>
 	</div>
+
+	<script src="/site/script.js"></script>
 </body>
 </html>
