@@ -1,7 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@100;300;400;500;700;800;900&family=RocknRoll+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200..900&display=swap");
+
+@font-face {
+	font-family: "Dela Gothic One";
+	font-display: swap;
+	src: url("/site/fonts/DelaGothicOne-Regular.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "M PLUS 1p";
+	font-display: swap;
+	src: url("/site/fonts/MPLUS1p-Bold.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Noto Serif JP";
+	font-display: swap;
+	src: url("/site/fonts/NotoSerifJP-Regular.ttf") format("truetype");
+}
 
 * {
 	margin: 0;
@@ -35,7 +49,7 @@
 }
 
 .main .contents-block .contents-title {
-	font-family: "M PLUS 1p", sans-serif;
+	font-family: "M PLUS 1p";
 	text-align: center;
 }
 
@@ -82,13 +96,13 @@
 }
 
 .main .contents-block .about .about-title {
-	font-family: "M PLUS 1p", sans-serif;
+	font-family: "M PLUS 1p";
 	font-size: 20px;
 	margin-top: 5px;
 }
 
 .main .contents-block .about .about-description {
-	font-family: "Noto Serif JP", serif;
+	font-family: "Noto Serif JP";
 	font-size: 16px;
 }
 
