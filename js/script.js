@@ -20,11 +20,11 @@ async function compresser() {
 		const json = await response.json()
 		const compressId = json.id
 		const compressUrl = `https://jli.li/${compressId}`
-		const resultText = originalUrl.length < compressUrl.length ? `元URLのほうがサイズが小さいので元URLを使うのをおすすめします。` : `${originalUrl.length}文字 → ${compressUrl.length}文字 に圧縮しました`
+		const resultText = originalUrl.length < compressUrl.length ? `元URLのほうがサイズが小さいので元URLを使うのをおすすめします。` : `圧縮に成功 ${originalUrl.length}文字 → ${compressUrl.length}文字 に圧縮しました`
 
 		let title = document.createElement("p")
 		title.classList.add("result-title")
-		title.textContent = originalUrl.length === compressUrl.length ? `元URLとサイズは変わりませんでした。(両方: ${compressUrl.length}文字)` : `圧縮に成功 ${resultText}`
+		title.textContent = originalUrl.length === compressUrl.length ? `元URLとサイズは変わりませんでした。(両方: ${compressUrl.length}文字)` : resultText
 
 		let result = document.createElement("a")
 		result.href = compressUrl
