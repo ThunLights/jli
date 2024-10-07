@@ -5,7 +5,12 @@
         <priority>1</priority>
     </url>
     <url>
-        <loc>https://jli.li/404/index.html</loc>
+        <loc>https://jli.li/site/index.html</loc>
+        <lastmod>2024-10-01</lastmod>
+        <priority>1</priority>
+    </url>
+    <url>
+        <loc>https://jli.li/site/404/index.html</loc>
         <lastmod>2024-10-03</lastmod>
         <priority>1</priority>
     </url>
