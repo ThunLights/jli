@@ -68,7 +68,7 @@ async fn main() -> std::io::Result<()> {
         Err(_) => EnvConfig {
             port: 3000,
             id_size: 6,
-            database_url: String::from("./db/sites.db"),
+            database_url: "./db/sites.db".to_string(),
         },
     };
     let db = Arc::new(DBClient::new(&server_config.database_url, server_config.id_size).await);
