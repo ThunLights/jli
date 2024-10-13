@@ -53,7 +53,7 @@ impl DBClient {
         id
     }
     async fn add_link(&self, link: &str, id: &str) -> bool {
-        sqlx::query("INSERT INTO sites (link, id) VALUES ($1, $2)").bind(link).bind(id).execute(&self.sites_database).await.is_ok()
+        sqlx::query!("INSERT INTO sites (link, id) VALUES ($1, $2)", link, id).execute(&self.sites_database).await.is_ok()
     }
     async fn check_id(&self, id: &str) -> bool {
         sqlx::query_as::<_, Site>("SELECT * FROM SITES where id = ?;").bind(id).fetch_one(&self.sites_database).await.is_ok()
