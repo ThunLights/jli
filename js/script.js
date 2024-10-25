@@ -44,7 +44,12 @@ async function compresser() {
 async function decompresser() {
 	document.getElementById("decompress-result").innerHTML = ""
 
-	const id = document.getElementById("decompress-url").value
+	let id = document.getElementById("decompress-url").value
+
+	if (id.match(/https:\/\/jli\.li\/(.+)/)) {
+		id = id.match(/https:\/\/jli\.li\/(.+)/)[1]
+	}
+
 	const response = await fetch(
 		`/api/decompress`,
 		{
