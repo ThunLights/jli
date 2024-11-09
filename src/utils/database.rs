@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind};
 
 use sqlx::{Pool, Sqlite, SqlitePool};
 
-use super::{id::generate_id, url::url_format_check};
+use super::{id::generate_id, url::{domain_check, url_format_check}};
 
 #[derive(sqlx::FromRow)]
 pub struct Site {
@@ -27,6 +27,9 @@ impl DBClient {
         if !url_format_check(link).await {
             return Err(Error::new(ErrorKind::Other, "URL Format Error"));
         }
+		if domain_check(link) {
+            return Err(Error::new(ErrorKind::Other, "URL Host Name Error"));
+		}
         if let Ok(site) = self.get_id(link).await {
             return Ok(site.id);
         } else {
