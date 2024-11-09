@@ -3,14 +3,22 @@ async function compresser() {
 	document.getElementById("compress-result").innerHTML = ""
 
 	const originalUrl = document.getElementById("compress-url").value
-	const url = new URL(originalUrl);
-	if (url.hostname === "jli.li") {
+	try {
+		const url = new URL(originalUrl);
+		if (url.hostname === "jli.li") {
+			let element = document.createElement("p")
+			element.style.color = "red"
+			element.textContent = "ドメインがjli.liのURLは短縮することが出来ません"
+			document.getElementById("compress-result").appendChild(element)
+			return;
+		};
+	} catch (error) {
 		let element = document.createElement("p")
 		element.style.color = "red"
-		element.textContent = "ドメインがjli.liのURLは短縮することが出来ません"
+		element.textContent = "URL以外の文字列は短縮できません"
 		document.getElementById("compress-result").appendChild(element)
 		return;
-	};
+	}
 	const response = await fetch(
 		`/api/compress`,
 		{
