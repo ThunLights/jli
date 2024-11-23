@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind};
 
 use sqlx::{Pool, Sqlite, SqlitePool};
 
-use super::{id::generate_id, url::{domain_check, url_format_check}};
+use super::{id::generate_id, url::{character_limit_check, domain_check, url_format_check}};
 
 #[derive(sqlx::FromRow)]
 pub struct Site {
@@ -27,6 +27,9 @@ impl DBClient {
         if !url_format_check(link).await {
             return Err(Error::new(ErrorKind::Other, "URL Format Error"));
         }
+		if character_limit_check(link) {
+			return  Err(Error::new(ErrorKind::Other, "URL CHARACTER LIMIT ERROR"));
+		}
 		if domain_check(link) {
             return Err(Error::new(ErrorKind::Other, "URL Host Name Error"));
 		}
