@@ -1,9 +1,11 @@
 target/
 node_modules/
+.sqlx/
 
 db/sites.db
+db/sites.db-shm
+db/sites.db-wal
 
 .env
 
 test.ts
-
