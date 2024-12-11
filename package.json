@@ -14,7 +14,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@types/node": "^22.8.0",
+    "@types/node": "^22.10.2",
     "javascript-obfuscator": "^4.1.1"
   }
 }
