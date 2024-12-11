@@ -16,6 +16,16 @@ Team ThunLightsにはRustが得意なプログラマーが居ないためもし�
 
 詳しくは[こちら](https://github.com/ThunLights#%E3%83%A1%E3%83%B3%E3%83%90%E3%83%BC%E5%8B%9F%E9%9B%86)をご覧ください
 
+## セットアップ方法
+
+### 1. .env.exampleをベースに.envを作成する。
+
+### 2. マイグレーションコマンドを打つ
+
+```console
+sqlx migrate run
+```
+
 ## 更新一覧
 
 バージョン一覧を書いておきます。
