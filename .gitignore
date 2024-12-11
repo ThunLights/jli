@@ -1,4 +1,9 @@
 target/
 node_modules/
 
+db/sites.db
+
+.env
+
 test.ts
+
