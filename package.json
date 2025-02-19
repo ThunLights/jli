@@ -1,20 +1,19 @@
 {
-  "name": "jli",
-  "module": "index.ts",
-  "type": "commonjs",
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "cargo run --bin main",
-    "test": "cargo test -- --nocapture",
-    "build": "bun run index.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "ci": "npx prisma migrate dev --name \"CI\" && npm run build"
   },
   "dependencies": {
-    "@types/node": "^22.8.0",
-    "javascript-obfuscator": "^4.1.1"
+    "@prisma/client": "^6.4.0",
+    "nuxt": "^3.15.4",
+    "vue": "latest",
+    "vue-router": "latest"
   }
 }

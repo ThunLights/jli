@@ -1,11 +1,26 @@
-target/
-node_modules/
-.sqlx/
 
-db/sites.db
-db/sites.db-shm
-db/sites.db-wal
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+node_modules
+
+# Logs
+logs
+*.log
+
+.DS_Store
+.fleet
+.idea
 
 .env
+.env.*
+!.env.example
 
-test.ts
+migrations
+
+db/database.sqlite3
+db/database.sqlite3-journal
