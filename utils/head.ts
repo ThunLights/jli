@@ -1,15 +1,13 @@
-<script setup lang="ts">
-    const props = defineProps({
-        title: {
-            type: String,
-        },
-        description: {
-            type: String
-        }
-    });
-    const title = `${props.title ?? "URL短縮サービス"} / jli.li`;
+
+export type Props = {
+	title?: string
+	description?: string
+}
+
+export function setHead(props: Props) {
+	const title = `${props.title ?? "URL短縮サービス"} / jli.li`;
     const description = props.description ?? "URL短縮サービスです。どんなに長いURLでも小さくまとめることが出来ます。";
-    useHead({
+	useHead({
         title,
         meta: [
             { charset: "UTF-8" },
@@ -31,8 +29,4 @@
             { name: "twitter:creator", content: "@thunlights" },
         ],
     });
-</script>
-
-<template></template>
-
-<style></style>
+}

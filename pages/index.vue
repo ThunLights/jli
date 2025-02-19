@@ -1,10 +1,10 @@
 <script setup lang="ts">
-    import Head from '~/components/Head.vue';
+    import { setHead } from '~/utils/head';
+
+    setHead({});
 </script>
 
 <template>
-    <Head></Head>
-
 	<div class="header">
 		<div class="header-block">
 			<a href="/">

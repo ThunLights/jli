@@ -7,4 +7,10 @@ export default defineNuxtConfig({
 			idSize: 6
 		}
 	},
+	components: [
+		{
+			path: '~/components',
+			pathPrefix: false,
+		},
+	],
 })
