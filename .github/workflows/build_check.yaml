@@ -1,0 +1,24 @@
+name: build_check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+        PORT: 3000
+        PUBLIC_ID_SIZE: 6
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "20.18.2"
+      - name: Install Dependencies
+        run: npm install
+      - name: CI
+        run: npm run ci
