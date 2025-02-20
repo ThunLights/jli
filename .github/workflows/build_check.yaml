@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-        PORT: 3000
-        PUBLIC_ID_SIZE: 6
+      PORT: 3000
+      PUBLIC_ID_SIZE: 6
 
     steps:
       - uses: actions/checkout@v2
