@@ -1,26 +1,24 @@
-
-.output
-.data
-.nuxt
-.nitro
-.cache
-dist
-
 node_modules
 
-# Logs
-logs
-*.log
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
 
 .DS_Store
-.fleet
-.idea
+Thumbs.db
 
 .env
 .env.*
 !.env.example
+!.env.test
 
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+logs/**.log
 migrations
-
 db/database.sqlite3
 db/database.sqlite3-journal

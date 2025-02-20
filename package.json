@@ -1,19 +1,43 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "ci": "npx prisma migrate dev --name \"CI\" && npm run build"
-  },
-  "dependencies": {
-    "@prisma/client": "^6.4.0",
-    "nuxt": "^3.15.4",
-    "vue": "latest",
-    "vue-router": "latest"
-  }
+	"name": "jli",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+        "start": "node build/index.js",
+		"dev": "vite dev",
+		"build": "vite build",
+        "ci": "npx prisma migrate dev --name \"init\" && npm run build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"format": "prettier --write .",
+		"lint": "prettier --check . && eslint ."
+	},
+	"devDependencies": {
+		"@eslint/compat": "^1.2.5",
+		"@eslint/js": "^9.18.0",
+		"@sveltejs/adapter-node": "^5.2.11",
+		"@sveltejs/kit": "^2.16.0",
+		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@tailwindcss/vite": "^4.0.0",
+		"eslint": "^9.18.0",
+		"eslint-config-prettier": "^10.0.1",
+		"eslint-plugin-svelte": "^2.46.1",
+		"globals": "^15.14.0",
+		"prettier": "^3.4.2",
+		"prettier-plugin-svelte": "^3.3.3",
+		"prettier-plugin-tailwindcss": "^0.6.11",
+		"svelte": "^5.0.0",
+		"svelte-check": "^4.0.0",
+		"tailwindcss": "^4.0.0",
+		"typescript": "^5.0.0",
+		"typescript-eslint": "^8.20.0",
+		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"@prisma/client": "^6.4.0",
+		"@types/eslint-config-prettier": "^6.11.3"
+	}
 }
